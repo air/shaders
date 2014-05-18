@@ -1,0 +1,21 @@
+{
+  "name": "shaders",
+  "version": "0.0.0",
+  "authors": [
+    "Aaron Bell"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "threestrap": "~0.0.5"
+  }
+}
