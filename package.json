@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
-    "three": "~0.66.2"
+    "three": "~0.66.2",
+    "requirejs": "~2.1.11"
   },
   "devDependencies": {},
   "scripts": {
