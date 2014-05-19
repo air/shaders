@@ -1,7 +1,20 @@
 Testing shaders with three.js.
 
-`main.js` must be processed if you make changes:
+# Run it
 
-    browserify -t brfs js/main.js -o build/browserified.js
+Just open in your browser.
 
-This takes the shader code from `shaders/` and inserts it into main.js.
+# Dependencies
+
+  - I used `bower` to get `threestrap`, https://github.com/unconed/threestrap
+  - Loading shaders is ugly. I used `browserify` to push shader text files into `main.js` as formatted strings.
+
+# Make changes
+
+    $ sudo npm install -g bower
+    $ sudo npm install -g browserify
+    $ npm install
+    $ bower install
+    # make changes to main.js
+    $ browserify -t brfs js/main.js -o build/browserified.js
+    $ google-chrome index.html
