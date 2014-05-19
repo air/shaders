@@ -3,15 +3,17 @@
 precision highp float;
 #endif
 
-attribute float displacement;
+uniform float amplitude;      // uniform, so all vertices get the same for this frame
+attribute float displacement; // attribute, so unique to this vertex
 varying vec3 vNormal;
 
 void main()
 {
   // READ ONLY attributes provided by THREE: projectionMatrix, modelViewMatrix, normal, position
-  vNormal = normal;
+  vNormal = normal; // take a copy so we can pass it through to fragment
 
-  vec3 displaceVector = vec3(displacement); // all 3 slots set to displacement
+  float displaceAmount = displacement * amplitude;
+  vec3 displaceVector = vec3(displaceAmount); // all 3 slots set to displacement
   displaceVector = displaceVector * normal; // point the displacement along this vertex
 
   // take THREE's position and displace it
