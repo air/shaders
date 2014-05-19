@@ -10,6 +10,8 @@ var shaderMaterial = new THREE.ShaderMaterial({
 });
 
 var mesh = new THREE.Mesh(new THREE.CubeGeometry(.5, .5, .5), shaderMaterial);
+//var mesh = new THREE.Mesh(new THREE.CubeGeometry(.5, .5, .5), new THREE.MeshBasicMaterial());
+
 three.scene.add(mesh);
 
 three.on('update', function () {
