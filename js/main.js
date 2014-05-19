@@ -1,8 +1,12 @@
+var fs = require('fs');
+
+// threestrap
 var three = THREE.Bootstrap();
 
 var shaderMaterial = new THREE.ShaderMaterial({
-  vertexShader: document.getElementById('vertexShader').textContent,
-  fragmentShader: document.getElementById('fragmentShader').textContent
+  // these fs functions are transformed by brfs into inline shaders
+  vertexShader: fs.readFileSync('./shaders/shader.vert', 'utf8'),
+  fragmentShader: fs.readFileSync('./shaders/shader.frag', 'utf8')
 });
 
 var mesh = new THREE.Mesh(new THREE.CubeGeometry(.5, .5, .5), shaderMaterial);

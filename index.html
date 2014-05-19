@@ -4,29 +4,8 @@
     <title>shaders</title>
     <script src="node_modules/three/three.min.js"></script>
     <script src="bower_components/threestrap/build/threestrap.min.js"></script>
-    <!-- shaders -->
-    <script type="x-shader/x-vertex" id="vertexShader">
-// switch on high precision floats
-#ifdef GL_ES
-precision highp float;
-#endif
-void main()
-{
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-}
-    </script>
-    <script type="x-shader/x-fragment" id="fragmentShader">
-// switch on high precision floats
-#ifdef GL_ES
-precision highp float;
-#endif
-void main()
-{
-  gl_FragColor  = vec4(1.0,0.0,1.0,1.0);
-}
-    </script>
   </head>
   <body>
-    <script src="js/main.js"></script>
+    <script src="build/browserified.js"></script>
   </body>
 </html>
