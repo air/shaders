@@ -6,32 +6,39 @@ var three = THREE.Bootstrap();
 var shaderMaterial = setupShader();
 
 var mesh = new THREE.Mesh(new THREE.CubeGeometry(1.0, 1.0, 1.0), shaderMaterial);
-//var mesh = new THREE.Mesh(new THREE.CubeGeometry(1.0, 1.0, 1.0), new THREE.MeshBasicMaterial());
 
-displaceMesh(shaderMaterial, mesh);
+colorMesh(shaderMaterial, mesh);
+
+// no effect, doesn't show up when logged so must be reset
+// mesh.geometry.colorsNeedUpdate = true;
 
 three.scene.add(mesh);
 
+// reference shapes
+var axisHelper = new THREE.AxisHelper(3);
+three.scene.add(axisHelper);
+
+var box = new THREE.Mesh(new THREE.CubeGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: new THREE.Color(1, 0, 0)}));
+box.position.set(1, 0, 1);
+three.scene.add(box);
+
+console.log(shaderMaterial);
+console.log(mesh);
+console.log(box);
+
+// update loop
 three.on('update', function () {
   var t = three.Time.now;
 
   animateShader(shaderMaterial, t);
 
-  var cameraDistance = 2.0;
+  var cameraDistance = 3.0;
   three.camera.position.set(Math.cos(t) * cameraDistance, 1.0, Math.sin(t) * cameraDistance);
   three.camera.lookAt(new THREE.Vector3());
 });
 
 function setupShader()
 {
-  var customAttributes = {
-    // displacement is a named attribute in the shader
-    displacement: {
-      type: 'f',  // float
-      value: []   // empty array
-    }
-  };
-
   var customUniforms = {
     // amplitude is a named uniform in the shader
     amplitude: {
@@ -41,28 +48,30 @@ function setupShader()
   };
 
   var material = new THREE.ShaderMaterial({
-    attributes: customAttributes,
     uniforms: customUniforms,
     // these fs functions are transformed by brfs into inline shaders
     vertexShader: fs.readFileSync('./shaders/shader.vert', 'utf8'),
     fragmentShader: fs.readFileSync('./shaders/shader.frag', 'utf8')
   });
 
+  // set USE_COLOR
+  material.vertexColors = THREE.VertexColors;
+
   return material;
 }
 
-function displaceMesh(material, theMesh)
+function colorMesh(material, theMesh)
 {
-  var verts = theMesh.geometry.vertices;
-  var valueArray = material.attributes.displacement.value;
+  var vertArray = theMesh.geometry.vertices;
 
-  for (var i=0; i < verts.length; i++)
+  for (var i=0; i < vertArray.length; i++)
   {
-    valueArray.push((Math.random() * 0.4) - 0.0);
+    var randomRgb = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
+    theMesh.geometry.colors.push(new THREE.Color(randomRgb));
   }
 }
 
 function animateShader(material, timeNow)
 {
-  material.uniforms.amplitude.value = Math.sin(timeNow);
+  material.uniforms.amplitude.value = 1 + (Math.abs(Math.sin(timeNow) * 0.5));
 }

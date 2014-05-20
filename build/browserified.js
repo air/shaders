@@ -7,32 +7,39 @@ var three = THREE.Bootstrap();
 var shaderMaterial = setupShader();
 
 var mesh = new THREE.Mesh(new THREE.CubeGeometry(1.0, 1.0, 1.0), shaderMaterial);
-//var mesh = new THREE.Mesh(new THREE.CubeGeometry(1.0, 1.0, 1.0), new THREE.MeshBasicMaterial());
 
-displaceMesh(shaderMaterial, mesh);
+colorMesh(shaderMaterial, mesh);
+
+// no effect, doesn't show up when logged so must be reset
+// mesh.geometry.colorsNeedUpdate = true;
 
 three.scene.add(mesh);
 
+// reference shapes
+var axisHelper = new THREE.AxisHelper(3);
+three.scene.add(axisHelper);
+
+var box = new THREE.Mesh(new THREE.CubeGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: new THREE.Color(1, 0, 0)}));
+box.position.set(1, 0, 1);
+three.scene.add(box);
+
+console.log(shaderMaterial);
+console.log(mesh);
+console.log(box);
+
+// update loop
 three.on('update', function () {
   var t = three.Time.now;
 
   animateShader(shaderMaterial, t);
 
-  var cameraDistance = 2.0;
+  var cameraDistance = 3.0;
   three.camera.position.set(Math.cos(t) * cameraDistance, 1.0, Math.sin(t) * cameraDistance);
   three.camera.lookAt(new THREE.Vector3());
 });
 
 function setupShader()
 {
-  var customAttributes = {
-    // displacement is a named attribute in the shader
-    displacement: {
-      type: 'f',  // float
-      value: []   // empty array
-    }
-  };
-
   var customUniforms = {
     // amplitude is a named uniform in the shader
     amplitude: {
@@ -42,29 +49,31 @@ function setupShader()
   };
 
   var material = new THREE.ShaderMaterial({
-    attributes: customAttributes,
     uniforms: customUniforms,
     // these fs functions are transformed by brfs into inline shaders
-    vertexShader: "// high precision floats\n#ifdef GL_ES\nprecision highp float;\n#endif\n\nuniform float amplitude;      // uniform, so all vertices get the same\nattribute float displacement; // attribute, so unique to this vertex\nvarying vec3 vNormal;\n\nvoid main()\n{\n  // READ ONLY attributes provided by THREE: projectionMatrix, modelViewMatrix, normal, position\n  vNormal = normal;\n\n  float displaceAmount = displacement * amplitude;\n  vec3 displaceVector = vec3(displaceAmount); // all 3 slots set to displacement\n  displaceVector = displaceVector * normal; // point the displacement along this vertex\n\n  // take THREE's position and displace it\n  vec3 newPosition = position + displaceVector;\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
-    fragmentShader: "// high precision floats\n#ifdef GL_ES\nprecision highp float;\n#endif\n\nvarying vec3 vNormal;\n\nvoid main()\n{\n  // set up a light direction, pointing up Y and into X and Z\n  vec3 light = vec3(0.3, 0.4, 0.5);\n\n  // normalize it\n  light = normalize(light);\n\n  // get the dot product of the light to the vertex normal.\n  // vertex normals pointing up Y and into X and Z (same as light) will have a positive dot product (approaching 1.0).\n  // vertex normals at right angles will be zero. More than right angles will be negative. \n  float dotProduct = dot(vNormal, light);\n  dotProduct = max(0.0, dotProduct);\n\n  // fragcolor is set with R, G, B, Alpha\n  gl_FragColor  = vec4(dotProduct, dotProduct, dotProduct, 1.0);\n}"
+    vertexShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nuniform float amplitude;      // uniform, so all vertices get the same for this frame\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // READ ONLY attributes provided by THREE: projectionMatrix, modelViewMatrix, normal, position, color (if USE_COLOR)\n\n  vColor = color;\n\n  // take THREE's position attribute and amplify it\n  vec3 newPosition = position * amplitude;\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
+    fragmentShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // fragcolor is set with R, G, B, Alpha\n  gl_FragColor  = vec4(vColor, 1.0);\n}"
   });
+
+  // set USE_COLOR
+  material.vertexColors = THREE.VertexColors;
 
   return material;
 }
 
-function displaceMesh(material, theMesh)
+function colorMesh(material, theMesh)
 {
-  var verts = theMesh.geometry.vertices;
-  var valueArray = material.attributes.displacement.value;
+  var vertArray = theMesh.geometry.vertices;
 
-  for (var i=0; i < verts.length; i++)
+  for (var i=0; i < vertArray.length; i++)
   {
-    valueArray.push((Math.random() * 0.4) - 0.0);
+    var randomRgb = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
+    theMesh.geometry.colors.push(new THREE.Color(randomRgb));
   }
 }
 
 function animateShader(material, timeNow)
 {
-  material.uniforms.amplitude.value = Math.sin(timeNow);
+  material.uniforms.amplitude.value = 1 + (Math.abs(Math.sin(timeNow) * 0.5));
 }
 },{}]},{},[1])
