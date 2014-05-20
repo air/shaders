@@ -62,7 +62,7 @@ function setNewColorAttribute(material, theMesh)
 
 function addReferenceShapes()
 {
-  var axisHelper = new THREE.AxisHelper(3);
+  var axisHelper = new THREE.AxisHelper(1);
   three.scene.add(axisHelper);
 
   var box = new THREE.Mesh(new THREE.CubeGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: new THREE.Color(1, 0, 0)}));
