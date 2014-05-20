@@ -3,13 +3,13 @@ Testing shaders with three.js.
 # Run it
 
     $ sudo npm install -g bower
-    $ sudo npm install -g browserify
     $ npm install
     $ bower install
     $ google-chrome index.html
 
 # Make changes
 
+    $ sudo npm install -g browserify
     # change main.js or shaders
     $ browserify -t brfs js/main.js -o build/browserified.js
     # or use watcherify
