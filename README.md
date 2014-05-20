@@ -23,6 +23,9 @@ Testing shaders with three.js.
 
 You can't have a `varying attribute`. If you want to pass an `attribute` or `uniform` through to fragment, you'll need to declare a separate `varying`.
 
+## Colors
+
 THREE will define a `color` shader variable, but it's undocumented. Q: When using a ShaderFragment, how does color get its value?
 
-Colors are defined in your **material**. BasicMaterial has a single `.color` property. Geometry has a bunch of color properties - ignore them.
+Sometimes colors are defined in your **material**. BasicMaterial has a single `color` property.
+Sometimes colors are defined in your **object**. Geometry has an array `colors`. It appears the object can store color data which should be honoured. See https://github.com/mrdoob/three.js/issues/1516
