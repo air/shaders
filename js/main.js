@@ -1,30 +1,18 @@
-var fs = require('fs');
+var fs = require('fs'); // brfs for injecting shaders into this file
 
-// threestrap
+// threestrap, https://github.com/unconed/threestrap
 var three = THREE.Bootstrap();
 
 var shaderMaterial = setupShader();
 
 var mesh = new THREE.Mesh(new THREE.CubeGeometry(1.0, 1.0, 1.0), shaderMaterial);
 
-colorMesh(shaderMaterial, mesh);
-
-// no effect, doesn't show up when logged so must be reset
-// mesh.geometry.colorsNeedUpdate = true;
+// use the vertices from the mesh to add attributes to the material
+setNewColorAttribute(shaderMaterial, mesh);
 
 three.scene.add(mesh);
 
-// reference shapes
-var axisHelper = new THREE.AxisHelper(3);
-three.scene.add(axisHelper);
-
-var box = new THREE.Mesh(new THREE.CubeGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: new THREE.Color(1, 0, 0)}));
-box.position.set(1, 0, 1);
-three.scene.add(box);
-
-console.log(shaderMaterial);
-console.log(mesh);
-console.log(box);
+addReferenceShapes();
 
 // update loop
 three.on('update', function () {
@@ -54,21 +42,36 @@ function setupShader()
     fragmentShader: fs.readFileSync('./shaders/shader.frag', 'utf8')
   });
 
-  // set USE_COLOR
-  material.vertexColors = THREE.VertexColors;
-
   return material;
 }
 
-function colorMesh(material, theMesh)
+// notice this is NOT the 'color' attribute added by THREE, we must avoid name clash
+function setNewColorAttribute(material, theMesh)
 {
+  material.attributes = { vertColor: { type: 'c', value: [] } };
+
   var vertArray = theMesh.geometry.vertices;
 
   for (var i=0; i < vertArray.length; i++)
   {
     var randomRgb = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
-    theMesh.geometry.colors.push(new THREE.Color(randomRgb));
+    material.attributes.vertColor.value.push(new THREE.Color(randomRgb));
   }
+}
+
+function addReferenceShapes()
+{
+  var axisHelper = new THREE.AxisHelper(3);
+  three.scene.add(axisHelper);
+
+  var box = new THREE.Mesh(new THREE.CubeGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: new THREE.Color(1, 0, 0)}));
+  box.position.set(1, 0, 1);
+  three.scene.add(box);
+
+  // debug
+  console.log(shaderMaterial);
+  console.log(mesh);
+  console.log(box);
 }
 
 function animateShader(material, timeNow)

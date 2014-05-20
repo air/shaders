@@ -3,22 +3,24 @@
 // precision highp float;
 // #endif
 
-uniform float amplitude;      // uniform, so all vertices get the same for this frame
+attribute vec3 vertColor; // color for this vertex
 
-varying vec3 vColor;
+uniform float amplitude;  // uniform, so all vertices get the same for this frame
+
+varying vec3 vColor;      // passthrough to frag
 
 void main()
 {
-  // READ ONLY attributes provided by THREE: projectionMatrix, modelViewMatrix, normal, position, color (if USE_COLOR)
+  // Useful read-only attributes from THREE: normal, position, color (unknown how to set)
 
-  // if we got passed a color of white, set vColor to blue as a flag
-  if (all(equal(color, vec3(1.0, 1.0, 1.0))))
+  // example debug: if we got passed a vertColor of white, use blue as a flag
+  if (all(equal(vertColor, vec3(1.0, 1.0, 1.0))))
   {
     vColor = vec3(0, 0, 1.0); 
   }
   else
   {
-    vColor = color;
+    vColor = vertColor;
   }
 
   // take THREE's position attribute and amplify it
