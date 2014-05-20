@@ -51,7 +51,7 @@ function setupShader()
   var material = new THREE.ShaderMaterial({
     uniforms: customUniforms,
     // these fs functions are transformed by brfs into inline shaders
-    vertexShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nuniform float amplitude;      // uniform, so all vertices get the same for this frame\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // READ ONLY attributes provided by THREE: projectionMatrix, modelViewMatrix, normal, position, color (if USE_COLOR)\n\n  vColor = color;\n\n  // take THREE's position attribute and amplify it\n  vec3 newPosition = position * amplitude;\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
+    vertexShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nuniform float amplitude;      // uniform, so all vertices get the same for this frame\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // READ ONLY attributes provided by THREE: projectionMatrix, modelViewMatrix, normal, position, color (if USE_COLOR)\n\n  // if we got passed a color of white, set vColor to blue as a flag\n  if (all(equal(color, vec3(1.0, 1.0, 1.0))))\n  {\n    vColor = vec3(0, 0, 1.0); \n  }\n  else\n  {\n    vColor = color;\n  }\n\n  // take THREE's position attribute and amplify it\n  vec3 newPosition = position * amplitude;\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
     fragmentShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // fragcolor is set with R, G, B, Alpha\n  gl_FragColor  = vec4(vColor, 1.0);\n}"
   });
 
