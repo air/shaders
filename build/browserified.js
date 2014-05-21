@@ -22,7 +22,8 @@ three.on('update', function () {
   animateShader(shaderMaterial, t);
 
   var cameraDistance = 3.0;
-  three.camera.position.set(Math.cos(t) * cameraDistance, 1.0, Math.sin(t) * cameraDistance);
+  var rotateSpeed = 0.3;
+  three.camera.position.set(Math.cos(t * rotateSpeed) * cameraDistance, 1.0, Math.sin(t * rotateSpeed) * cameraDistance);
   three.camera.lookAt(new THREE.Vector3());
 });
 
@@ -56,6 +57,7 @@ function setNewColorAttribute(material, theMesh)
   var colorTable = new THREE.Lut('rainbow', 16);
   colorTable.setMin(0);
   colorTable.setMax(vertArray.length - 1);
+  console.log(colorTable);
 
   for (var i=0; i < vertArray.length; i++)
   {
