@@ -6,10 +6,9 @@ var three = THREE.Bootstrap();
 
 var shaderMaterial = createShader();
 
-var hypercubeSize = 20;
+var hypercubeSize = 25;
 var geometry = createGeometry(hypercubeSize);
-// assume cubes are 1x1x1 and 0.5 apart
-var cameraHeight = (hypercubeSize * 1.5) / 2;
+var cameraHeight = 0;
 
 var mesh = new THREE.Mesh(geometry, shaderMaterial);
 
@@ -26,7 +25,7 @@ three.on('update', function () {
 
   animateShader(shaderMaterial, t);
 
-  var cameraDistance = 25.0;
+  var cameraDistance = hypercubeSize * 2;
   var rotateSpeed = 0.2;
 
   three.camera.position.set(Math.cos(t * rotateSpeed) * cameraDistance, cameraHeight, Math.sin(t * rotateSpeed) * cameraDistance);
@@ -39,8 +38,10 @@ function createGeometry(cubesPerRow)
   var cubeSize = 1.0;
   var cubeGeometry = new THREE.CubeGeometry(cubeSize, cubeSize, cubeSize); // a reference cube
   var spacing = cubeSize + (cubeSize / 2);
-  var cubesCreated = 0;
 
+  var startingOffset = -(spacing / 2) * (cubesPerRow - 1);
+
+  var cubesCreated = 0;
   for (var cubeX = 0; cubeX < cubesPerRow; cubeX++)
   {
     for (var cubeY = 0; cubeY < cubesPerRow; cubeY++)
@@ -48,9 +49,9 @@ function createGeometry(cubesPerRow)
       for (var cubeZ = 0; cubeZ < cubesPerRow; cubeZ++)
       {
         // console.log('creating cube ' + cubesCreated + ' at location ' + cubeX + ', ' + cubeY + ', ' + cubeZ);
-        var offsetX = cubeX * spacing;
-        var offsetY = cubeY * spacing;
-        var offsetZ = cubeZ * spacing;
+        var offsetX = startingOffset + (cubeX * spacing);
+        var offsetY = startingOffset + (cubeY * spacing);
+        var offsetZ = startingOffset + (cubeZ * spacing);
         // add vertices
         for (var vIndex = 0; vIndex < cubeGeometry.vertices.length; vIndex++)
         {
@@ -103,7 +104,7 @@ function setNewColorAttribute(material, theMesh)
 
   var vertArray = theMesh.geometry.vertices;
 
-  var colorTable = new THREE.Lut('rainbow', 1024);
+  var colorTable = new THREE.Lut('blackbody', 1024);
   colorTable.setMin(0);
   colorTable.setMax(vertArray.length - 1);
   console.log(colorTable);
@@ -117,7 +118,7 @@ function setNewColorAttribute(material, theMesh)
 
 function addReferenceShapes()
 {
-  var axisHelper = new THREE.AxisHelper(1);
+  var axisHelper = new THREE.AxisHelper(hypercubeSize + 2);
   three.scene.add(axisHelper);
 
   // debug
