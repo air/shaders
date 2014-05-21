@@ -53,10 +53,14 @@ function setNewColorAttribute(material, theMesh)
 
   var vertArray = theMesh.geometry.vertices;
 
+  var colorTable = new THREE.Lut('rainbow', 16);
+  colorTable.setMin(0);
+  colorTable.setMax(vertArray.length - 1);
+
   for (var i=0; i < vertArray.length; i++)
   {
-    var randomRgb = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
-    material.attributes.vertColor.value.push(new THREE.Color(randomRgb));
+    var color = colorTable.getColor(i);
+    material.attributes.vertColor.value.push(color);
   }
 }
 
