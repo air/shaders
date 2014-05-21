@@ -3,9 +3,11 @@ var fs = require('fs'); // brfs for injecting shaders into this file
 // threestrap, https://github.com/unconed/threestrap
 var three = THREE.Bootstrap();
 
-var shaderMaterial = setupShader();
+var shaderMaterial = createShader();
 
-var mesh = new THREE.Mesh(new THREE.CubeGeometry(1.0, 1.0, 1.0), shaderMaterial);
+var geometry = createGeometry();
+
+var mesh = new THREE.Mesh(geometry, shaderMaterial);
 
 // use the vertices from the mesh to add attributes to the material
 setNewColorAttribute(shaderMaterial, mesh);
@@ -16,7 +18,7 @@ addReferenceShapes();
 
 // update loop
 three.on('update', function () {
-  var t = three.Time.now;
+  var t = three.Time.now; // notice this is three, not THREE
 
   animateShader(shaderMaterial, t);
 
@@ -26,7 +28,38 @@ three.on('update', function () {
   three.camera.lookAt(new THREE.Vector3());
 });
 
-function setupShader()
+function createGeometry()
+{
+  var geometry = new THREE.Geometry();  // start with nothing
+  var cubeGeometry = new THREE.CubeGeometry(1.0, 1.0, 1.0); // a reference cube
+  var numberOfCubes = 2;
+  var offsetX = 1.5;
+
+  for (var cube = 0; cube < numberOfCubes; cube++)
+  {
+    console.log('cube ' + cube);
+    var offset = cube * offsetX;
+    // add vertices
+    for (var vIndex = 0; vIndex < cubeGeometry.vertices.length; vIndex++)
+    {
+      var vertex = cubeGeometry.vertices[vIndex];
+      var arrSize = geometry.vertices.push(new THREE.Vector3(vertex.x + offset, vertex.y, vertex.z));
+      console.log(geometry.vertices[arrSize - 1]);
+    }
+    // add faces
+    for (var fIndex = 0; fIndex < cubeGeometry.faces.length; fIndex++)
+    {
+      var face = cubeGeometry.faces[fIndex];
+      var faceOffset = cube * cubeGeometry.vertices.length;
+      var arrSize = geometry.faces.push(new THREE.Face3(face.a + faceOffset, face.b + faceOffset, face.c + faceOffset));
+      console.log(geometry.faces[arrSize - 1]);
+    }
+  }
+  console.log(geometry);
+  return geometry;
+}
+
+function createShader()
 {
   var customUniforms = {
     // amplitude is a named uniform in the shader
@@ -58,7 +91,7 @@ function setNewColorAttribute(material, theMesh)
   colorTable.setMax(vertArray.length - 1);
   console.log(colorTable);
 
-  for (var i=0; i < vertArray.length; i++)
+  for (var i = 0; i < vertArray.length; i++)
   {
     var color = colorTable.getColor(i);
     material.attributes.vertColor.value.push(color);
@@ -70,14 +103,9 @@ function addReferenceShapes()
   var axisHelper = new THREE.AxisHelper(1);
   three.scene.add(axisHelper);
 
-  var box = new THREE.Mesh(new THREE.CubeGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: new THREE.Color(1, 0, 0)}));
-  box.position.set(1, 0, 1);
-  three.scene.add(box);
-
   // debug
   console.log(shaderMaterial);
   console.log(mesh);
-  console.log(box);
 }
 
 function animateShader(material, timeNow)
