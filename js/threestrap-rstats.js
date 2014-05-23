@@ -4,7 +4,7 @@ THREE.Bootstrap.registerPlugin('rstats', {
 
   install: function (three) {
     var settings = {
-      CSSPath: 'lib/',
+      CSSPath: 'css/',
       values: {
         update: { caption: 'Update time (ms)', over: 10 },
         fps: { caption: 'FPS', below: 30 }
