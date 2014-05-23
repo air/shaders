@@ -2,7 +2,7 @@
  // brfs for injecting shaders into this file
 
 // threestrap, https://github.com/unconed/threestrap
-var three = THREE.Bootstrap();
+var three = THREE.Bootstrap('core', 'rstats');
 
 var shaderMaterial = createShader();
 

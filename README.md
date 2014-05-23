@@ -29,6 +29,8 @@ You can't have a `varying attribute`. If you want to pass an `attribute` or `uni
 
 THREE does a lot of hidden 'prefixed' shader work on your behalf. You can [avoid this using RawShaderMaterial](https://github.com/mrdoob/three.js/issues/3121).
 
+Passing very large numbers into your shader is a bad idea. You can lose precision. Example: If you pass `threestrap.Time.now` as a `uniform float time` and perform `sin(time)` in your shader, you're going to have a bad time. LITERALLY.
+
 ## Colors
 
 THREE will define a `color` shader variable, but it's undocumented.
