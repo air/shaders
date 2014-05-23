@@ -123,8 +123,8 @@ function setNewColorAttribute(material, theMesh)
 
 function addReferenceShapes()
 {
-  var axisHelper = new THREE.AxisHelper(hypercubeSize + 2);
-  three.scene.add(axisHelper);
+  // var axisHelper = new THREE.AxisHelper(hypercubeSize + 2);
+  // three.scene.add(axisHelper);
 
   // debug
   // console.log(shaderMaterial);
