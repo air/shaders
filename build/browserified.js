@@ -23,7 +23,7 @@ var startTime = new Date().getTime();
 
 // update loop
 three.on('update', function () {
-  var time = new Date().getTime() - startTime; // we want this to be a smallish number for sin() in shaders
+  var time = new Date().getTime() - startTime; // we want this to be a smallish number for e.g. sin() in shaders
 
   animateShader(shaderMaterial, time);
 
