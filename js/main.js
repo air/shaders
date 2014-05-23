@@ -14,7 +14,7 @@ var mesh = new THREE.Mesh(geometry, shaderMaterial);
 // use the vertices from the mesh to add attributes to the material
 setNewColorAttribute(shaderMaterial, mesh);
 
-three.scene.add(mesh);
+three.scene.add(mesh); // takes zero ms
 
 addReferenceShapes();
 
@@ -33,6 +33,8 @@ three.on('update', function () {
 
 function createGeometry(cubesPerRow)
 {
+  var startTime = new Date().getTime();
+
   var geometry = new THREE.Geometry();  // start with nothing
   var cubeSize = 1.0;
   var cubeGeometry = new THREE.CubeGeometry(cubeSize, cubeSize, cubeSize); // a reference cube
@@ -71,8 +73,7 @@ function createGeometry(cubesPerRow)
       }
     }
   }
-  // console.log(geometry);
-  console.log('cubes: ' + cubesCreated);
+  console.log('created geometry of ' + cubesCreated + ' cubes in ' + (new Date().getTime() - startTime) + 'ms');
   return geometry;
 }
 
@@ -99,6 +100,8 @@ function createShader()
 // notice this is NOT the 'color' attribute added by THREE, we must avoid name clash
 function setNewColorAttribute(material, theMesh)
 {
+  var startTime = new Date().getTime();
+
   material.attributes = { vertColor: { type: 'c', value: [] } };
 
   var vertArray = theMesh.geometry.vertices;
@@ -106,13 +109,15 @@ function setNewColorAttribute(material, theMesh)
   var colorTable = new THREE.Lut('blackbody', 1024);
   colorTable.setMin(0);
   colorTable.setMax(vertArray.length - 1);
-  console.log(colorTable);
+  // console.log(colorTable);
 
   for (var i = 0; i < vertArray.length; i++)
   {
     var color = colorTable.getColor(i);
     material.attributes.vertColor.value.push(color);
   }
+
+  console.log('coloured ' + vertArray.length + ' vertices in ' + (new Date().getTime() - startTime) + 'ms')
 }
 
 function addReferenceShapes()
@@ -121,8 +126,8 @@ function addReferenceShapes()
   three.scene.add(axisHelper);
 
   // debug
-  console.log(shaderMaterial);
-  console.log(mesh);
+  // console.log(shaderMaterial);
+  // console.log(mesh);
 }
 
 function animateShader(material, timeNow)
