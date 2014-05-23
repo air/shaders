@@ -12,8 +12,7 @@ THREE.Bootstrap.registerPlugin('rstats', {
       groups: [ { caption: 'Performance', values: [ 'fps', 'update' ] } ],
       //plugins: [threestats]
     };
-    var rstats = this.rstats = new rStats(settings); // TODO do not understand the nuance here
-    three.rstats = rstats;
+    this.rstats = new rStats(settings);
   },
 
   uninstall: function (three) {
