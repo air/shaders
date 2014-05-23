@@ -25,7 +25,7 @@ three.on('update', function () {
 
   animateShader(shaderMaterial, t);
 
-  var cameraDistance = hypercubeSize * 2;
+  var cameraDistance = 60;
   var rotateSpeed = 0.2;
 
   three.camera.position.set(Math.cos(t * rotateSpeed) * cameraDistance, cameraHeight, Math.sin(t * rotateSpeed) * cameraDistance);
@@ -85,13 +85,18 @@ function createShader()
     amplitude: {
       type: 'f',  // float
       value: 0
+    },
+    time: {
+      type: 'f',
+      value: 0
     }
   };
 
   var material = new THREE.ShaderMaterial({
     uniforms: customUniforms,
-    // these fs functions are transformed by brfs into inline shaders
-    vertexShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nattribute vec3 vertColor; // color for this vertex\n\nuniform float amplitude;  // uniform, so all vertices get the same for this frame\n\nvarying vec3 vColor;      // passthrough to frag\n\nvoid main()\n{\n  // Useful read-only attributes from THREE: normal, position, color (unknown how to set)\n\n  // example debug: if we got passed a vertColor of white, use blue as a flag\n  if (all(equal(vertColor, vec3(1.0, 1.0, 1.0))))\n  {\n    vColor = vec3(0, 0, 1.0); \n  }\n  else\n  {\n    vColor = vertColor;\n  }\n\n  // take THREE's position attribute and amplify it\n  vec3 newPosition = position * amplitude;\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
+    // 1. attributes will be added later.
+    // 2. These fs functions are transformed by brfs into inline shaders
+    vertexShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nattribute vec3 vertColor; // color for this vertex\n\nuniform float amplitude;\nuniform float time;\n\nvarying vec3 vColor;      // passthrough to frag\n\nvoid main()\n{\n  // Useful read-only attributes from THREE: normal, position, color (unknown how to set)\n\n  vColor = vertColor;\n\n  // take THREE's position attribute and adjust it\n  vec3 newPosition = position;\n  newPosition *= abs(sin(amplitude));\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
     fragmentShader: "// high precision floats\n// #ifdef GL_ES\n// precision highp float;\n// #endif\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // fragcolor is set with R, G, B, Alpha\n  gl_FragColor  = vec4(vColor, 1.0);\n}"
   });
 
@@ -133,6 +138,8 @@ function addReferenceShapes()
 
 function animateShader(material, timeNow)
 {
-  material.uniforms.amplitude.value = 1 + (Math.abs(Math.sin(timeNow) * 0.0));
+  // material.uniforms.amplitude.value = Math.sin(timeNow);
+  material.uniforms.amplitude.value = timeNow;
+  material.uniforms.time.value = timeNow;
 }
 },{}]},{},[1])

@@ -2,13 +2,11 @@ Testing shaders with three.js.
 
 # Run it
 
-    $ sudo npm install -g bower
-    $ npm install
-    $ bower install
     $ google-chrome index.html
 
 # Make changes
 
+    $ npm install
     $ sudo npm install -g browserify
     # change main.js or shaders
     $ browserify -t brfs js/main.js -o build/browserified.js
@@ -17,7 +15,13 @@ Testing shaders with three.js.
 # Dependencies
 
   - I used `bower` to get `threestrap`, https://github.com/unconed/threestrap
-  - Loading shaders is ugly. I used `browserify` to push shader text files into `main.js` as formatted strings.
+  - Loading shaders is ugly. I used `browserify` and `bfrs` to push shader text files into `main.js` as formatted strings.
+
+# Ideas
+
+  - Reproduce the PS3 shimmering flakes
+  - Flake snowfall with shader animation (rotation, gravity, maybe fluid lateral movement) and specular lighting. Or more like Minecraft snow
+  - TV screen, phosphor elements curved CRT style
 
 # Learnings
 
