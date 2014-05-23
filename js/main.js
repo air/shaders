@@ -18,16 +18,21 @@ three.scene.add(mesh); // takes zero ms
 
 addReferenceShapes();
 
+var startTime = new Date().getTime();
+
 // update loop
 three.on('update', function () {
-  var t = three.Time.now; // notice this is three, not THREE
+  var time = new Date().getTime() - startTime; // we want this to be a smallish number for sin() in shaders
 
-  animateShader(shaderMaterial, t);
+  animateShader(shaderMaterial, time);
 
   var cameraDistance = 60;
-  var rotateSpeed = 0.2;
+  var rotateSpeed = 0.0006;
 
-  three.camera.position.set(Math.cos(t * rotateSpeed) * cameraDistance, cameraHeight, Math.sin(t * rotateSpeed) * cameraDistance);
+  three.camera.position.set(
+    Math.cos(time * rotateSpeed) * cameraDistance,
+    cameraHeight,
+    Math.sin(time * rotateSpeed) * cameraDistance);
   three.camera.lookAt(new THREE.Vector3());
 });
 
@@ -80,11 +85,6 @@ function createGeometry(cubesPerRow)
 function createShader()
 {
   var customUniforms = {
-    // amplitude is a named uniform in the shader
-    amplitude: {
-      type: 'f',  // float
-      value: 0
-    },
     time: {
       type: 'f',
       value: 0
@@ -94,7 +94,7 @@ function createShader()
   var material = new THREE.ShaderMaterial({
     uniforms: customUniforms,
     // 1. attributes will be added later.
-    // 2. These fs functions are transformed by brfs into inline shaders
+    // 2. These fs functions are transformed by brfs into inline shaders:
     vertexShader: fs.readFileSync('./shaders/shader.vert', 'utf8'),
     fragmentShader: fs.readFileSync('./shaders/shader.frag', 'utf8')
   });
@@ -114,7 +114,6 @@ function setNewColorAttribute(material, theMesh)
   var colorTable = new THREE.Lut('blackbody', 1024);
   colorTable.setMin(0);
   colorTable.setMax(vertArray.length - 1);
-  // console.log(colorTable);
 
   for (var i = 0; i < vertArray.length; i++)
   {
@@ -137,7 +136,5 @@ function addReferenceShapes()
 
 function animateShader(material, timeNow)
 {
-  // material.uniforms.amplitude.value = Math.sin(timeNow);
-  material.uniforms.amplitude.value = timeNow;
-  material.uniforms.time.value = timeNow;
+  material.uniforms.time.value = (timeNow / 1000);
 }

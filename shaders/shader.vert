@@ -1,11 +1,10 @@
 // high precision floats
-// #ifdef GL_ES
-// precision highp float;
-// #endif
+#ifdef GL_ES
+precision highp float;
+#endif
 
 attribute vec3 vertColor; // color for this vertex
 
-uniform float amplitude;
 uniform float time;
 
 varying vec3 vColor;      // passthrough to frag
@@ -16,9 +15,8 @@ void main()
 
   vColor = vertColor;
 
-  // take THREE's position attribute and adjust it
   vec3 newPosition = position;
-  newPosition *= abs(sin(amplitude));
+  newPosition *= 0.2 + abs(sin(time));
 
   gl_Position = projectionMatrix *
                 modelViewMatrix *
