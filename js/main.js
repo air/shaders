@@ -7,7 +7,7 @@ var shaderMaterial = createShader();
 
 var hypercubeSize = 25;
 var geometry = createGeometry(hypercubeSize);
-var cameraHeight = 0;
+var cameraHeight = 1;
 
 var mesh = new THREE.Mesh(geometry, shaderMaterial);
 

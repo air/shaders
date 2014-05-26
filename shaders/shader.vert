@@ -16,7 +16,9 @@ void main()
   vColor = vertColor;
 
   vec3 newPosition = position;
-  newPosition *= 0.2 + abs(sin(time));
+  newPosition.y += 1.0 * sin(time + position.x);
+  newPosition.x += 1.0 * sin(time + position.z);
+  newPosition.z += 1.0 * sin(time + position.y);
 
   gl_Position = projectionMatrix *
                 modelViewMatrix *
