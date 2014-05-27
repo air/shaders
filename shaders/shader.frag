@@ -8,5 +8,7 @@ varying vec3 vColor;
 void main()
 {
   // fragcolor is set with R, G, B, Alpha
-  gl_FragColor  = vec4(vColor, 1.0);
+  // gl_FragColor  = vec4(vColor, 1.0);
+  vec3 rgb;
+  gl_FragColor  = vec4(rgb, 1.0);
 }
