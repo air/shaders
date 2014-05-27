@@ -31,6 +31,32 @@ THREE does a lot of hidden 'prefixed' shader work on your behalf. You can [avoid
 
 Passing very large numbers into your shader is a bad idea. You can lose precision. Example: If you pass `threestrap.Time.now` as a `uniform float time` and perform `sin(time)` in your shader, you're going to have a bad time. LITERALLY.
 
+## Pixel shaders
+
+Shadertoy is for pixel shaders. Tutorials like http://thndl.com/?1 are for pixel shaders.
+
+U and V are axes used for the X-Y of your texture, because X-Y-Z are already taken. http://en.wikipedia.org/wiki/UV_mapping
+
+UV coords http://wiki.winamp.com/wiki/Pixel_Shader_Basics#UV_Coordinates are 0,0 (top left) to 1,1 (bottom right). So for a quad 600px in width, the first pixel would be defined as spanning from U coord 0 to U coord (1 / 600).
+
+Pixel shaders http://stackoverflow.com/questions/19449590/webgl-glsl-how-does-a-shadertoy-work
+A pixel shader works exactly like CRT scanlines. Sweeps from topleft across the top row, incrementing by one pixel U value each time. On the top row V is zero. Once the top row is done V gets incremented to the vertical pixel amount and we go left-right again.
+The shader program runs on every pixel, for every frame. That's a lot of executions.
+
+A pixel shader is a fragment shader. There are only four vertices and they're constant (the screen corners).
+
+You are given a pixel and asked what to do with it. When given an input image, you can choose to return something based on pixels elsewhere. So a blurring shader could average out the nearby values. Or you could just sample the pixel to the left, resulting in a horizontal shift of the image.
+
+If you divide the UV you're given, you end up sampling it multiple times and scaling up the input texture. e.g. getPixelFromInputTexture(U * 0.25, V) will return pixel X=1 for U values 0, 1, 2, 3. If you multiply it, you end up scaling it down.
+
+Post-processing shaders. These are pixel shaders that run on the rendered image itself! Scanning every pixel and manipulating it.
+
+### Ideas
+
+  - Shift out the R, G, B elements to create a Teleglitch-style 'broken display' effect.
+  - Scanlines.
+  - "Multiply is much faster than divide, so do x * 0.5 rather than x / 2." Not sure I believe this.
+
 ## Colors
 
 THREE will define a `color` shader variable, but it's undocumented.
