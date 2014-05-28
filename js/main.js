@@ -1,7 +1,10 @@
 var fs = require('fs'); // brfs for injecting shaders into this file
 
 // threestrap, https://github.com/unconed/threestrap
-var three = THREE.Bootstrap('core', 'rstats');
+var three = THREE.Bootstrap({
+  plugins: ['core', 'rstats', 'controls'],
+  controls: { klass: THREE.OrbitControls }
+});
 
 var shaderMaterial = createShader();
 
@@ -20,20 +23,13 @@ addReferenceShapes();
 
 var startTime = new Date().getTime();
 
+three.camera.position.set(30, 30, 50);
+
 // update loop
 three.on('update', function () {
   var time = new Date().getTime() - startTime; // we want this to be a smallish number for e.g. sin() in shaders
 
   animateShader(shaderMaterial, time);
-
-  var cameraDistance = 60;
-  var rotateSpeed = 0.0006;
-
-  three.camera.position.set(
-    Math.cos(time * rotateSpeed) * cameraDistance,
-    cameraHeight,
-    Math.sin(time * rotateSpeed) * cameraDistance);
-  three.camera.lookAt(new THREE.Vector3());
 });
 
 function createGeometry(cubesPerRow)

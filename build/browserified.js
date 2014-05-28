@@ -2,7 +2,10 @@
  // brfs for injecting shaders into this file
 
 // threestrap, https://github.com/unconed/threestrap
-var three = THREE.Bootstrap('core', 'rstats');
+var three = THREE.Bootstrap({
+  plugins: ['core', 'rstats', 'controls'],
+  controls: { klass: THREE.OrbitControls }
+});
 
 var shaderMaterial = createShader();
 
@@ -21,20 +24,13 @@ addReferenceShapes();
 
 var startTime = new Date().getTime();
 
+three.camera.position.set(30, 30, 50);
+
 // update loop
 three.on('update', function () {
   var time = new Date().getTime() - startTime; // we want this to be a smallish number for e.g. sin() in shaders
 
   animateShader(shaderMaterial, time);
-
-  var cameraDistance = 60;
-  var rotateSpeed = 0.0006;
-
-  three.camera.position.set(
-    Math.cos(time * rotateSpeed) * cameraDistance,
-    cameraHeight,
-    Math.sin(time * rotateSpeed) * cameraDistance);
-  three.camera.lookAt(new THREE.Vector3());
 });
 
 function createGeometry(cubesPerRow)
@@ -97,7 +93,7 @@ function createShader()
     // 1. attributes will be added later.
     // 2. These fs functions are transformed by brfs into inline shaders:
     vertexShader: "// high precision floats\n#ifdef GL_ES\nprecision highp float;\n#endif\n\nattribute vec3 vertColor; // color for this vertex\n\nuniform float time;\n\nvarying vec3 vColor;      // passthrough to frag\n\nvoid main()\n{\n  // Useful read-only attributes from THREE: normal, position, color (unknown how to set)\n\n  vColor = vertColor;\n\n  vec3 newPosition = position;\n  newPosition.y += 1.0 * sin(time + position.x);\n  newPosition.x += 1.0 * sin(time + position.z);\n  newPosition.z += 1.0 * sin(time + position.y);\n\n  gl_Position = projectionMatrix *\n                modelViewMatrix *\n                vec4(newPosition, 1.0);\n}",
-    fragmentShader: "// high precision floats\n#ifdef GL_ES\nprecision highp float;\n#endif\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  // fragcolor is set with R, G, B, Alpha\n  // gl_FragColor  = vec4(vColor, 1.0);\n  vec3 rgb;\n  gl_FragColor  = vec4(rgb, 1.0);\n}"
+    fragmentShader: "// high precision floats\n#ifdef GL_ES\nprecision highp float;\n#endif\n\nvarying vec3 vColor;\n\nvoid main()\n{\n  vec3 rgb = vColor;\n  \n  gl_FragColor  = vec4(rgb, 1.0); // last value is alpha\n}"
   });
 
   return material;
