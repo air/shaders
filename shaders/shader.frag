@@ -21,11 +21,11 @@ void main()
 
   float horizon = 0.35;
 
-  if (alignmentToUp == 1.0)
+  if (alignmentToUp > 0.99)
   {
     rgb = blue;
   }
-  else if (alignmentToUp == -1.0)
+  else if (alignmentToUp < -0.99)
   {
     rgb = brown;
   }
