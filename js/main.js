@@ -8,9 +8,9 @@ var three = THREE.Bootstrap({
 
 var shaderMaterial = createShader();
 
-var hypercubeSize = 25;
-var geometry = createGeometry(hypercubeSize);
-var cameraHeight = 1;
+var hypercubeSize = 40;
+// var geometry = createGeometry(hypercubeSize);
+var geometry = new THREE.CubeGeometry(hypercubeSize, hypercubeSize, hypercubeSize);
 
 var mesh = new THREE.Mesh(geometry, shaderMaterial);
 

@@ -51,6 +51,8 @@ If you divide the UV you're given, you end up sampling it multiple times and sca
 
 Post-processing shaders. These are pixel shaders that run on the rendered image itself! Scanning every pixel and manipulating it.
 
+Why the unfriendly name `vUv`? It's a varying, so people prefix with `v`. And unfortunately it's the UV coordinate, which doesn't have a friendlier expression. Hence the cryptic `vUv`.
+
 ### Ideas
 
   - Shift out the R, G, B elements to create a Teleglitch-style 'broken display' effect.

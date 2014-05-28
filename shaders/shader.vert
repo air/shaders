@@ -3,22 +3,25 @@
 precision highp float;
 #endif
 
-attribute vec3 vertColor; // color for this vertex
+attribute vec3 vertColor; // custom color for this vertex
 
 uniform float time;
 
-varying vec3 vColor;      // passthrough to frag
+varying vec3 vColor;
+varying vec2 vUv;
+varying vec3 vNormal;
 
 void main()
 {
-  // Useful read-only attributes from THREE: normal, position, color (unknown how to set)
+  // Variables from THREE: https://github.com/mrdoob/three.js/blob/master/src/renderers/webgl/WebGLProgram.js#L153
 
   vColor = vertColor;
 
+  // passthroughs
+  vNormal = normal;
+  vUv = uv;
+
   vec3 newPosition = position;
-  newPosition.y += 1.0 * sin(time + position.x);
-  newPosition.x += 1.0 * sin(time + position.z);
-  newPosition.z += 1.0 * sin(time + position.y);
 
   gl_Position = projectionMatrix *
                 modelViewMatrix *
