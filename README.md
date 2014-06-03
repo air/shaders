@@ -53,6 +53,19 @@ Post-processing shaders. These are pixel shaders that run on the rendered image 
 
 Why the unfriendly name `vUv`? It's a varying, so people prefix with `v`. And unfortunately it's the UV coordinate, which doesn't have a friendlier expression. Hence the cryptic `vUv`.
 
+## Getting your shaders into JS
+
+There is no elegant way to do this, given 1. JS has limited support for multiline strings and 2. You're in a browser and can't do inline includes easily. After much experimentation this is the cleanest:
+
+  1. Define your shaders in their own files
+  2. Put a placeholder token in HTML, viz. index-template.html
+  3. Use grunt-replace to push the files into the template. Automate this with grunt-contrib-watch.
+
+Alternatives that weren't good:
+
+  - browserify and brfs to inject the text. Functional, but browserify will hide all your globals! Ha ha.
+  - glslify. Nope, this is specifically for non-three projects.
+
 ### Ideas
 
   - Shift out the R, G, B elements to create a Teleglitch-style 'broken display' effect.

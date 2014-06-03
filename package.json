@@ -7,7 +7,9 @@
     "three": "~0.66.2"
   },
   "devDependencies": {
-    "brfs": "~1.1.1"
+    "grunt": "~0.4.5",
+    "grunt-replace": "~0.7.7",
+    "grunt-contrib-watch": "~0.6.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

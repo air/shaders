@@ -1,5 +1,3 @@
-var fs = require('fs'); // brfs for injecting shaders into this file
-
 // threestrap, https://github.com/unconed/threestrap
 var three = THREE.Bootstrap({
   plugins: ['core', 'rstats', 'controls'],
@@ -89,10 +87,9 @@ function createShader()
 
   var material = new THREE.ShaderMaterial({
     uniforms: customUniforms,
-    // 1. attributes will be added later.
-    // 2. These fs functions are transformed by brfs into inline shaders:
-    vertexShader: fs.readFileSync('./shaders/shader.vert', 'utf8'),
-    fragmentShader: fs.readFileSync('./shaders/shader.frag', 'utf8')
+    // attributes will be added later.
+    vertexShader: document.getElementById('vertexShader').textContent,
+    fragmentShader: document.getElementById('fragmentShader').textContent
   });
 
   return material;
