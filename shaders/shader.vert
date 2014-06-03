@@ -10,6 +10,7 @@ uniform float time;
 varying vec3 vColor;
 varying vec2 vUv;
 varying vec3 vNormal;
+varying vec3 vCamera;
 
 void main()
 {
@@ -20,6 +21,7 @@ void main()
   // passthroughs
   vNormal = normal;
   vUv = uv;
+  vCamera = cameraPosition;
 
   vec3 newPosition = position;
 

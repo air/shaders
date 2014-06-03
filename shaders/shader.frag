@@ -6,6 +6,7 @@ precision highp float;
 varying vec3 vColor;
 varying vec2 vUv;
 varying vec3 vNormal;
+varying vec3 vCamera;
 
 void main()
 {
@@ -41,6 +42,12 @@ void main()
     float yRange = (vUv.y * (1.0/horizon)) - 1.0;
     rgb = mix(white, blue, yRange);
   }
+
+  float alignmentToCamera = dot(vNormal, vCamera);
+  // if (alignmentToCamera > 0.5)
+  // {
+    rgb *= alignmentToCamera;
+  // }
   
   gl_FragColor  = vec4(rgb, 1.0); // last value is alpha
 }
