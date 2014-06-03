@@ -7,15 +7,15 @@ Testing shaders with three.js.
 # Make changes
 
     $ npm install
-    $ sudo npm install -g browserify
-    # change main.js or shaders
-    $ browserify -t brfs js/main.js -o build/browserified.js
-    # or use watcherify
+    $ sudo npm install -g grunt-cli
+    # if you change shaders, update index.html with:
+    $ grunt
+    # or grunt watch to do this automatically.
 
 # Dependencies
 
   - I used `bower` to get `threestrap`, https://github.com/unconed/threestrap
-  - Loading shaders is ugly. I used `browserify` and `bfrs` to push shader text files into `main.js` as formatted strings.
+  - See 'Getting shaders into JS' below for use of grunt
 
 # Ideas
 
