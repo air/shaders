@@ -5,49 +5,51 @@ precision highp float;
 
 varying vec3 vColor;
 varying vec2 vUv;
-varying vec3 vNormal;
+varying vec3 vNormal; // the normal of the PIXEL
 varying vec3 vCamera;
 
 void main()
 {
-  // vec3 rgb = vColor;
+  vec3 blue = vec3(0.3, 0.3, 0.9);
+  vec3 brown = vec3(0.7, 0.4, 0.2);
+  vec3 white = vec3(1.0, 1.0, 1.0);
+  vec3 black = vec3(0.0, 0.0, 0.0);
 
-  // vec3 up = vec3(0.0, 1.0, 0.0);
-  // float alignmentToUp = dot(vNormal, up); // alignment of this pixel fragment
+  vec3 rgb;
 
-  // vec3 blue = vec3(0.3, 0.3, 0.9);
-  // vec3 brown = vec3(0.7, 0.4, 0.2);
-  // vec3 white = vec3(1.0, 1.0, 1.0);
-  // vec3 black = vec3(0.0, 0.0, 0.0);
+  vec3 up = vec3(0.0, 1.0, 0.0);
+  float alignmentToUp = dot(vNormal, up); // alignment of this pixel fragment
 
-  // float horizon = 0.35;
+  float horizon = 0.35;
 
-  // if (alignmentToUp > 0.99)
-  // {
-  //   rgb = blue;
-  // }
-  // else if (alignmentToUp < -0.99)
-  // {
-  //   rgb = brown;
-  // }
-  // else if (vUv.y < horizon)
-  // {
-  //   // Y will range 0 to horizon, so adjust up to get 0..1
-  //   float yRange = vUv.y * (1.0 / horizon);
-  //   rgb = mix(brown, black, yRange);
-  // }
-  // else
-  // {
-  //   // Y will range horizon to 1, so adjust range and subtract 1 to get 0..1
-  //   float yRange = (vUv.y * (1.0/horizon)) - 1.0;
-  //   rgb = mix(white, blue, yRange);
-  // }
+  // top of cube
+  if (alignmentToUp > 0.99)
+  {
+    rgb = blue;
+  }
+  // bottom  
+  else if (alignmentToUp < -0.99)
+  {
+    rgb = brown;
+  }
+  // side. If we are in the bottom portion of the face
+  else if (vUv.y < horizon)
+  {
+    // Y will range 0 to horizon, so adjust up to get 0..1
+    float yRange = vUv.y * (1.0 / horizon);
+    rgb = mix(brown, black, yRange);
+  }
+  else
+  {
+    // Y will range horizon to 1, so adjust range and subtract 1 to get 0..1
+    float yRange = (vUv.y * (1.0/horizon)) - 1.0;
+    rgb = mix(white, blue, yRange);
+  }
 
-  float alignmentToCamera = abs(dot(vNormal, vCamera));
-  // // if (alignmentToCamera > 0.5)
-  // // {
-  //   rgb *= alignmentToCamera;
-  // // }
+  vec3 cameraNormal = normalize(vCamera);
+  float alignmentToCamera = abs(dot(vNormal, cameraNormal));
+  // lighting: range from facing the camera = 120% brightness, to facing away = 20%.
+  rgb *= 0.2 + alignmentToCamera;
   
-  gl_FragColor  = vec4(alignmentToCamera, alignmentToCamera, alignmentToCamera, 1.0); // last value is alpha
+  gl_FragColor  = vec4(rgb, 1.0); // last value is alpha
 }
