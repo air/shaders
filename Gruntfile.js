@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     // grunt-contrib-watch
     watch: {
       scripts: {
-        files: ['shaders/shader.*'],
+        files: ['shaders/shader.*', './index-template.html'],
         tasks: ['replace']
       }
     }

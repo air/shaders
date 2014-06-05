@@ -20,7 +20,7 @@ void main()
   vec3 up = vec3(0.0, 1.0, 0.0);
   float alignmentToUp = dot(vNormal, up); // alignment of this pixel fragment
 
-  float horizon = 0.35;
+  float horizon = 0.6;
 
   // top of cube
   if (alignmentToUp > 0.99)
@@ -47,7 +47,7 @@ void main()
   }
 
   vec3 cameraNormal = normalize(vCamera);
-  float alignmentToCamera = abs(dot(vNormal, cameraNormal));
+  float alignmentToCamera = dot(vNormal, cameraNormal);
   // lighting: range from facing the camera = 120% brightness, to facing away = 20%.
   rgb *= 0.2 + alignmentToCamera;
   

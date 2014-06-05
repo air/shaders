@@ -8,24 +8,33 @@ var shaderMaterial = createShader();
 
 var hypercubeSize = 40;
 // var geometry = createGeometry(hypercubeSize);
-var geometry = new THREE.CubeGeometry(hypercubeSize, hypercubeSize, hypercubeSize);
+// var geometry = new THREE.CubeGeometry(hypercubeSize, hypercubeSize, hypercubeSize);
+var geometry = new THREE.SphereGeometry(20, 64, 64);
 
 var mesh = new THREE.Mesh(geometry, shaderMaterial);
 
 // use the vertices from the mesh to add attributes to the material
 setNewColorAttribute(shaderMaterial, mesh);
 
+var refCube = new THREE.Mesh(new THREE.CubeGeometry(3, 3, 3), new THREE.MeshBasicMaterial({color: 0xffff00}));
+
 three.scene.add(mesh); // takes zero ms
+three.scene.add(refCube);
 
 addReferenceShapes();
 
 var startTime = new Date().getTime();
+var TIME_COEFFICIENT = 1000;
 
 three.camera.position.set(30, 30, 50);
 
 // update loop
 three.on('update', function () {
   var time = new Date().getTime() - startTime; // we want this to be a smallish number for e.g. sin() in shaders
+
+  refCube.position.x = 50 * Math.sin(time / TIME_COEFFICIENT);
+  refCube.position.y = 50 * Math.sin(time / TIME_COEFFICIENT / 2);
+  refCube.position.z = 50 * Math.cos(time * 0.001);
 
   animateShader(shaderMaterial, time);
 });
@@ -104,13 +113,14 @@ function setNewColorAttribute(material, theMesh)
 
   var vertArray = theMesh.geometry.vertices;
 
-  var colorTable = new THREE.Lut('blackbody', 1024);
-  colorTable.setMin(0);
-  colorTable.setMax(vertArray.length - 1);
+  // var colorTable = new THREE.Lut('blackbody', 1024);
+  // colorTable.setMin(0);
+  // colorTable.setMax(vertArray.length - 1);
 
   for (var i = 0; i < vertArray.length; i++)
   {
-    var color = colorTable.getColor(i);
+    // var color = colorTable.getColor(i);
+    var color = 0xffffff;
     material.attributes.vertColor.value.push(color);
   }
 
@@ -129,5 +139,5 @@ function addReferenceShapes()
 
 function animateShader(material, timeNow)
 {
-  material.uniforms.time.value = (timeNow / 1000);
+  material.uniforms.time.value = (timeNow / TIME_COEFFICIENT);
 }
