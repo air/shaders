@@ -9,7 +9,7 @@ var shaderMaterial = createShader();
 var hypercubeSize = 40;
 // var geometry = createGeometry(hypercubeSize);
 // var geometry = new THREE.CubeGeometry(hypercubeSize, hypercubeSize, hypercubeSize);
-var geometry = new THREE.SphereGeometry(20, 64, 64);
+var geometry = new THREE.SphereGeometry(20, 128, 128);
 
 var mesh = new THREE.Mesh(geometry, shaderMaterial);
 
