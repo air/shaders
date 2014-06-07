@@ -16,10 +16,10 @@ var mesh = new THREE.Mesh(geometry, shaderMaterial);
 // use the vertices from the mesh to add attributes to the material
 setNewColorAttribute(shaderMaterial, mesh);
 
-var refCube = new THREE.Mesh(new THREE.CubeGeometry(3, 3, 3), new THREE.MeshBasicMaterial({color: 0xffff00}));
+// var refCube = new THREE.Mesh(new THREE.CubeGeometry(3, 3, 3), new THREE.MeshBasicMaterial({color: 0xffff00}));
 
 three.scene.add(mesh); // takes zero ms
-three.scene.add(refCube);
+// three.scene.add(refCube);
 
 addReferenceShapes();
 
@@ -32,9 +32,9 @@ three.camera.position.set(30, 30, 50);
 three.on('update', function () {
   var time = new Date().getTime() - startTime; // we want this to be a smallish number for e.g. sin() in shaders
 
-  refCube.position.x = 50 * Math.sin(time / TIME_COEFFICIENT);
-  refCube.position.y = 50 * Math.sin(time / TIME_COEFFICIENT / 2);
-  refCube.position.z = 50 * Math.cos(time * 0.001);
+  // refCube.position.x = 50 * Math.sin(time / TIME_COEFFICIENT);
+  // refCube.position.y = 50 * Math.sin(time / TIME_COEFFICIENT / 2);
+  // refCube.position.z = 50 * Math.cos(time * 0.001);
 
   animateShader(shaderMaterial, time);
 });
