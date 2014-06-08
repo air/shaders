@@ -20,15 +20,15 @@ void main()
   vCamera = cameraPosition;
   vec3 newPosition = position;
 
-  // vec3 magnet = vec3( 50.0 * sin(time),
-  //                     50.0 * sin(time / 2.0),
-  //                     50.0 * cos(time));
-  // magnet = normalize(magnet);
-  // float alignmentToMagnet = dot(normal, magnet);
-  // if (alignmentToMagnet > 0.0)
-  // {
-  //   newPosition *= (1.0 + pow(alignmentToMagnet, 18.0));
-  // }
+  vec3 magnet = vec3( 50.0 * sin(time),
+                      50.0 * sin(time / 2.0),
+                      50.0 * cos(time));
+  magnet = normalize(magnet);
+  float alignmentToMagnet = dot(normal, magnet);
+  if (abs(alignmentToMagnet) > 0.97)
+  {
+    newPosition *= (1.0 + pow(alignmentToMagnet, 18.0));
+  }
 
   gl_Position = projectionMatrix *
                 modelViewMatrix *
