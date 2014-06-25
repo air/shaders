@@ -4,6 +4,7 @@
 // threestrap, https://github.com/unconed/threestrap
 var three = THREE.Bootstrap({
   plugins: ['core', 'rstats', 'controls'],
+  renderer: { parameters: { alpha: true, antialias: true } }, // transparent background, enable antialias
   controls: { klass: THREE.OrbitControls }
 });
 
