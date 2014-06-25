@@ -2,12 +2,12 @@
 <html>
   <head>
     <title>shaders</title>
-    <script src="node_modules/three/three.min.js"></script>
-    <script src="node_modules/three/examples/js/controls/OrbitControls.js"></script>
-    <script src="bower_components/threestrap/build/threestrap.min.js"></script>
-    <script src="js/Lut.js"></script>
-    <script src="js/rStats.js"></script>
-    <script src="js/threestrap-rstats.js"></script>
+    <script src="../node_modules/three/three.min.js"></script>
+    <script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+    <script src="../bower_components/threestrap/build/threestrap.min.js"></script>
+    <script src="../js/Lut.js"></script>
+    <script src="../js/rStats.js"></script>
+    <script src="../js/threestrap-rstats.js"></script>
     <style>
       canvas {
         background: radial-gradient(ellipse at center,  #7d7e7d 0%, #0e0e0e 100%);
@@ -19,10 +19,7 @@
       Drag to rotate, mousewheel to zoom, rightclick-drag to pan.
     </div>
     <div style="color: lightgray; background-color: black; position: absolute; bottom: 0px">
-      <a href="build/blackcube.html">blackcube</a>&nbsp;-&nbsp;
-      <a href="build/sinecube.html">sinecube</a>&nbsp;-&nbsp;
-      <a href="build/gradient.html">gradient</a>&nbsp;-&nbsp;
-      <a href="build/beach.html">noisyball</a>
+      <a href="../index.html">back to index</a>
     </div>
     <script id="vertexShader" type="x-shader/x-vertex">
 // high precision floats
@@ -53,7 +50,7 @@ void main()
   vec3 newPosition = position;
 
   vec2 noiseInput = uv;
-  // noiseInput.y += time;
+  noiseInput.y += time;
   float noise = rand(noiseInput);
   newPosition *= (1.0 + (noise / 10.0));
 
@@ -121,6 +118,6 @@ void main()
   gl_FragColor  = vec4(rgb, 1.0); // last value is alpha
 }
     </script>
-    <script src="js/main.js"></script>
+    <script src="beach.js"></script>
   </body>
 </html>

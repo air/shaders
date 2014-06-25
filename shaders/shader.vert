@@ -26,7 +26,7 @@ void main()
   vec3 newPosition = position;
 
   vec2 noiseInput = uv;
-  noiseInput.y += time;
+  // noiseInput.y += time;
   float noise = rand(noiseInput);
   newPosition *= (1.0 + (noise / 10.0));
 
