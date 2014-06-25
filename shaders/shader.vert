@@ -11,6 +11,11 @@ varying vec2 vUv;
 varying vec3 vNormal; // the normal of the VERTEX
 varying vec3 vCamera;
 
+// hack from http://stackoverflow.com/questions/4200224/random-noise-functions-for-glsl
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 // Variables from THREE: https://github.com/mrdoob/three.js/blob/master/src/renderers/webgl/WebGLProgram.js#L153
 void main()
 {
@@ -20,15 +25,10 @@ void main()
   vCamera = cameraPosition;
   vec3 newPosition = position;
 
-  vec3 magnet = vec3( 50.0 * sin(time),
-                      50.0 * sin(time / 2.0),
-                      50.0 * cos(time));
-  magnet = normalize(magnet);
-  float alignmentToMagnet = dot(normal, magnet);
-  if (abs(alignmentToMagnet) > 0.97)
-  {
-    newPosition *= (1.0 + pow(alignmentToMagnet, 18.0));
-  }
+  vec2 noiseInput = uv;
+  noiseInput.y += time;
+  float noise = rand(noiseInput);
+  newPosition *= (1.0 + (noise / 10.0));
 
   gl_Position = projectionMatrix *
                 modelViewMatrix *
