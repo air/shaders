@@ -22,6 +22,7 @@ Testing shaders with three.js.
   - Reproduce the PS3 shimmering flakes
   - Flake snowfall with shader animation (rotation, gravity, maybe fluid lateral movement) and specular lighting. Or more like Minecraft snow
   - TV screen, phosphor elements curved CRT style
+  - Add colormap http://bl.ocks.org/mbostock/310c99e53880faec2434
 
 # Learnings
 
