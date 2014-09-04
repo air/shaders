@@ -106,3 +106,34 @@ So if we push eight colors into `myCube.geometry.colors` and use a ShaderMateria
   - When using a ShaderMaterial, how does the attribute `color` get its value?
   - What's the point of the `ShaderMaterial.vertexColors` flag?
   - Should Geometry.colors ever be used with a Mesh, or just ParticleSystem and Line?
+
+# Misc TO DO
+
+shader - need a texture that shows no rotation
+
+look into module loading https://github.com/dnschneid/crouton/issues/364#issuecomment-45142414
+
+http://www.html5rocks.com/en/tutorials/webgl/million_letters/
+http://thndl.com/?1
+
+render a texture
+
+what's the relationship between THREE shader chunks and your shader? How does it get merged?
+
+figure out that three.js ShaderMaterial color behaviour
+
+difference between uv and uv2?
+
+cubes:
+- rotate individually
+- light individually
+- texture individually
+
+post-process http://www.airtightinteractive.com/2013/02/intro-to-pixel-shaders-in-three-js/
+
+efficient noise https://github.com/ashima/webgl-noise
+
+write shader guide
+  - basics
+  - pixel shaders
+  - how to set up a basic project
