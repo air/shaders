@@ -137,3 +137,9 @@ write shader guide
   - basics
   - pixel shaders
   - how to set up a basic project
+
+Resources
+
+http://c0de517e.blogspot.ca/2014/04/smoothen-your-functions.html
+http://in2gpu.com/2014/06/23/toon-shading-effect-and-simple-contour-detection/
+https://twitter.com/mattdesl/status/481271081467400192
