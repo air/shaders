@@ -1,4 +1,4 @@
-Testing shaders with three.js.
+Testing shaders with three.js. See this live at http://air.github.io/shaders
 
 # Run it
 
